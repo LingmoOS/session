@@ -21,8 +21,8 @@ Session manager that orchestrates the startup of all Lingmo Desktop components.
 %license LICENSE
 %{_libexecdir}/lingmo-session
 %{_libdir}/libLingmoSession.so.%{majver}*
-%{_libdir}/systemd/user/lingmo-session.service
-%{_libdir}/systemd/user/lingmo-session.target
+%{_prefix}/lib/systemd/user/lingmo-session.service
+%{_prefix}/lib/systemd/user/lingmo-session.target
 %changelog
-* Wed Jul 09 2026 Lingmo OS Team <team@lingmo.org> - 1.0.0-1
+* Thu Jul 09 2026 Lingmo OS Team <team@lingmo.org> - 1.0.0-1
 - Initial release
