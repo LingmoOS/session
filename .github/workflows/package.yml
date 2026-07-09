@@ -57,8 +57,35 @@ jobs:
       - name: Install git
         run: dnf install -y git
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: dnf install -y cmake ninja-build rpm-build qt6-qtbase-devel
+      - name: Install system dependencies
+        run: dnf install -y cmake ninja-build rpm-build qt6-qtbase-devel curl jq
+      - name: Download lingmo-utils
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest \
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dnf install -y /tmp/lingmo-utils-*.rpm
+      - name: Download lingmo-config
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest \
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dnf install -y /tmp/lingmo-config-*.rpm
+      - name: Download lingmo-ipc
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest \
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dnf install -y /tmp/lingmo-ipc-*.rpm
       - name: Build RPM
         run: |
           mkdir -p /tmp/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}

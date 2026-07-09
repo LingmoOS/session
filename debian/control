@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Lingmo OS Team <team@lingmo.org>
 Build-Depends: debhelper-compat (= 13), cmake (>= 3.21), qt6-base-dev (>= 6.5),
-               lingmo-ipc-dev, lingmo-utils-dev, lingmo-config-dev
+               liblingmoipc-dev, liblingmoutils-dev, liblingmoconfig-dev
 Standards-Version: 4.6.2
 Rules-Requires-Root: no
 
