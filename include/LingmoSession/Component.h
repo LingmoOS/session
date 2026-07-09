@@ -30,6 +30,7 @@ public:
     QStringList dependencies() const;
 
     Lingmo::ComponentState state() const;
+    void setState(Lingmo::ComponentState state);
 
     // Check if all dependencies are satisfied
     bool dependenciesSatisfied(const QStringList &readyComponents) const;

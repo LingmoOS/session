@@ -13,6 +13,12 @@ QString Component::name() const { return d->name; }
 QString Component::command() const { return d->command; }
 QStringList Component::dependencies() const { return d->dependencies; }
 Lingmo::ComponentState Component::state() const { return d->state; }
+void Component::setState(Lingmo::ComponentState state) {
+    if (d->state != state) {
+        d->state = state;
+        emit stateChanged(state);
+    }
+}
 bool Component::dependenciesSatisfied(const QStringList &readyComponents) const
 {
     for (const QString &dep : d->dependencies) {

@@ -70,6 +70,7 @@ Q_SIGNALS:
     void sessionStopped();
 
 private:
+    void tryStartPending();
     std::unique_ptr<SessionManagerPrivate> d;
 };
 

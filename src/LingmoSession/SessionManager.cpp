@@ -13,11 +13,9 @@ SessionManager::SessionManager(QObject *parent)
     d->restartTimer = new QTimer(this);
     d->restartTimer->setSingleShot(true);
     connect(d->restartTimer, &QTimer::timeout, this, [this]() {
-        // Check if any components need restart
         for (auto it = d->components.constBegin(); it != d->components.constEnd(); ++it) {
-            if (it.value()->state() == ComponentState::Failed) {
+            if (it.value()->state() == ComponentState::Failed)
                 restartComponent(it.key());
-            }
         }
     });
 }
@@ -58,14 +56,10 @@ void SessionManager::tryStartPending() {
         Component *comp = it.value();
         if (comp->state() == ComponentState::Stopped || comp->state() == ComponentState::Failed) {
             if (comp->dependenciesSatisfied(d->readyComponents)) {
-                // Start the component
                 qInfo("LingmoSession: Starting component: %s", qPrintable(comp->name()));
-                comp->d->state = ComponentState::Starting;
-                emit comp->stateChanged(ComponentState::Starting);
-                // Simulate start (in real implementation, launch process)
+                comp->setState(ComponentState::Starting);
                 QProcess::startDetached(comp->command());
-                comp->d->state = ComponentState::Running;
-                emit comp->stateChanged(ComponentState::Running);
+                comp->setState(ComponentState::Running);
             } else {
                 allReady = false;
             }
@@ -82,13 +76,11 @@ void SessionManager::stopSession() {
         return;
     d->state = SessionState::Stopping;
     emit stateChanged(d->state);
-    // Stop all running components in reverse order
     QStringList names = d->components.keys();
     for (int i = names.size() - 1; i >= 0; --i) {
         Component *comp = d->components.value(names.at(i));
         if (comp->state() == ComponentState::Running) {
-            comp->d->state = ComponentState::Stopped;
-            emit comp->stateChanged(ComponentState::Stopped);
+            comp->setState(ComponentState::Stopped);
             emit componentStopped(comp->name());
         }
     }
@@ -106,14 +98,11 @@ bool SessionManager::restartComponent(const QString &name) {
         return false;
     }
     d->crashRecovery->recordCrash(name);
-    comp->d->state = ComponentState::Stopped;
-    emit comp->stateChanged(ComponentState::Stopped);
+    comp->setState(ComponentState::Stopped);
     qInfo("LingmoSession: Restarting component: %s", qPrintable(name));
-    comp->d->state = ComponentState::Starting;
-    emit comp->stateChanged(ComponentState::Starting);
+    comp->setState(ComponentState::Starting);
     QProcess::startDetached(comp->command());
-    comp->d->state = ComponentState::Running;
-    emit comp->stateChanged(ComponentState::Running);
+    comp->setState(ComponentState::Running);
     return true;
 }
 Component *SessionManager::component(const QString &name) const {
