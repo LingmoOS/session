@@ -17,10 +17,31 @@ Session manager that orchestrates the startup of all Lingmo Desktop components.
 %cmake_build
 %install
 %cmake_install
+%package -n liblingmosession%{majver}
+Summary:        Runtime libraries for lingmo-session
+
+%description -n liblingmosession%{majver}
+Runtime libraries for lingmo-session.
+
+%package -n liblingmosession-devel
+Summary:        Development files for lingmo-session
+Requires:       liblingmosession%{majver}%{?isa} = %{version}-%{release}
+
+%description -n liblingmosession-devel
+Headers and CMake integration for building applications that use lingmo-session.
+
+%files -n liblingmosession%{majver}
+%license LICENSE
+%{_libdir}/libLingmoSession.so.%{majver}*
+
+%files -n liblingmosession-devel
+%{_includedir}/LingmoSession/
+%{_libdir}/cmake/LingmoSession/
+%{_libdir}/libLingmoSession.so
+
 %files
 %license LICENSE
 %{_libexecdir}/lingmo-session
-%{_libdir}/libLingmoSession.so.%{majver}*
 %{_prefix}/lib/systemd/user/lingmo-session.service
 %{_prefix}/lib/systemd/user/lingmo-session.target
 %changelog
