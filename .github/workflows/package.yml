@@ -11,8 +11,32 @@ jobs:
       - name: Install git
         run: apt-get update -qq && apt-get install -y -qq git
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: apt-get update -qq && apt-get install -y -qq build-essential cmake debhelper dpkg-dev qt6-base-dev
+      - name: Install system dependencies
+        run: apt-get update -qq && apt-get install -y -qq build-essential cmake debhelper dpkg-dev qt6-base-dev curl jq
+      - name: Download lingmo-utils
+        run: |
+          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest \
+            | jq -r '.assets[] | select(.name | test("^liblingmoutils(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoutils*.deb || apt-get install -y -f
+      - name: Download lingmo-config
+        run: |
+          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest \
+            | jq -r '.assets[] | select(.name | test("^liblingmoconfig(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoconfig*.deb || apt-get install -y -f
+      - name: Download lingmo-ipc
+        run: |
+          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest \
+            | jq -r '.assets[] | select(.name | test("^liblingmoipc(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoipc*.deb || apt-get install -y -f
       - name: Build Debian package
         run: |
           dpkg-buildpackage -us -uc -b
@@ -41,5 +65,5 @@ jobs:
       - name: Upload .rpm
         uses: actions/upload-artifact@v4
         with:
-          name: lingmo-session-rpm
+          name: lingmo-session-rb
           path: /tmp/rpmbuild/RPMS/**/*.rpm
