@@ -2,7 +2,9 @@
 #include <LingmoSession/EnvironmentSetup.h>
 #include <LingmoSession/AutostartManager.h>
 #include <LingmoSession/Component.h>
+#ifdef LINGMO_HAS_IPC
 #include <LingmoIPC/ServiceManager.h>
+#endif
 #include <QCoreApplication>
 #include <QDebug>
 
@@ -22,8 +24,10 @@ int main(int argc, char *argv[])
     }
 
     // Notify systemd we're ready
+#ifdef LINGMO_HAS_IPC
     auto *svcMgr = Lingmo::ServiceManager::instance();
     svcMgr->setReady();
+#endif
 
     // Create session manager
     auto *session = Lingmo::SessionManager::instance();

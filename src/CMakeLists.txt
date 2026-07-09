@@ -33,8 +33,19 @@ target_include_directories(LingmoSession
 )
 target_link_libraries(LingmoSession
     PUBLIC Qt6::Core Qt6::DBus
-    PRIVATE Lingmo::IPC Lingmo::Utils Lingmo::Config
 )
+if(TARGET Lingmo::IPC)
+    target_link_libraries(LingmoSession PRIVATE Lingmo::IPC)
+    target_compile_definitions(LingmoSession PRIVATE LINGMO_HAS_IPC)
+endif()
+if(TARGET Lingmo::Utils)
+    target_link_libraries(LingmoSession PRIVATE Lingmo::Utils)
+    target_compile_definitions(LingmoSession PRIVATE LINGMO_HAS_UTILS)
+endif()
+if(TARGET Lingmo::Config)
+    target_link_libraries(LingmoSession PRIVATE Lingmo::Config)
+    target_compile_definitions(LingmoSession PRIVATE LINGMO_HAS_CONFIG)
+endif()
 target_compile_definitions(LingmoSession PRIVATE LINGMOSESSION_LIBRARY)
 set_target_properties(LingmoSession PROPERTIES
     SOVERSION 1 VERSION ${PROJECT_VERSION}
