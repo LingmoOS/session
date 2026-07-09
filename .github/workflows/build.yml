@@ -65,6 +65,17 @@ jobs:
           dpkg -i /tmp/liblingmoipc*.deb || apt-get install -y -f
           find /usr -name "LingmoIPC*" -type f 2>/dev/null | head -20
 
+      - name: Verify installed Lingmo files
+        run: |
+          echo "=== All Lingmo files ==="
+          find /usr -name "*Lingmo*" -o -name "*lingmo*" 2>/dev/null | grep -v ".github" | head -50
+          echo "=== CMake config files ==="
+          find /usr -path "*/cmake/Lingmo*" -type f 2>/dev/null
+          echo "=== Shared libraries ==="
+          find /usr -name "libLingmo*" 2>/dev/null
+          echo "=== dpkg list ==="
+          dpkg -l | grep lingmo
+
       - name: Configure
         run: >
           cmake -B build -G Ninja
