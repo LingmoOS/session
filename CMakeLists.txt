@@ -20,16 +20,9 @@ option(BUILD_TESTING "Build tests" ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core DBus)
 find_package(Qt6 COMPONENTS Test QUIET)
-find_package(LingmoIPC QUIET)
-find_package(LingmoUtils QUIET)
-find_package(LingmoConfig QUIET)
-
-if(NOT TARGET Lingmo::IPC)
-    message(WARNING "LingmoIPC not found - IPC features will be stubbed")
-    set(LINGMO_IPC_FOUND FALSE)
-else()
-    set(LINGMO_IPC_FOUND TRUE)
-endif()
+find_package(LingmoIPC REQUIRED)
+find_package(LingmoUtils REQUIRED)
+find_package(LingmoConfig REQUIRED)
 
 add_subdirectory(src)
 
