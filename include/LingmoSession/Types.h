@@ -3,6 +3,7 @@
 #include <QObject>
 
 namespace Lingmo {
+Q_NAMESPACE
 
 enum class SessionState {
     Idle,
