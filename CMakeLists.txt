@@ -22,18 +22,18 @@ find_package(Qt6 REQUIRED COMPONENTS Core DBus)
 find_package(Qt6 COMPONENTS Test QUIET)
 
 # Find Lingmo dependencies
-find_path(LINGMO_IPC_INCLUDE_DIR LingmoIPC/DBusConnection.h
-    PATHS /usr/include /usr/local/include)
+execute_process(COMMAND dpkg-architecture -qDEB_HOST_MULTIARCH
+    OUTPUT_VARIABLE DEB_HOST_MULTIARCH OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+find_path(LINGMO_IPC_INCLUDE_DIR LingmoIPC/DBusConnection.h)
 find_library(LINGMO_IPC_LIBRARY NAMES LingmoIPC
-    PATHS /usr/lib /usr/lib/x86_64-linux-gnu /usr/local/lib)
-find_path(LINGMO_UTILS_INCLUDE_DIR LingmoUtils/Logger.h
-    PATHS /usr/include /usr/local/include)
+    PATHS /usr/lib/${DEB_HOST_MULTIARCH} /usr/lib /usr/local/lib)
+find_path(LINGMO_UTILS_INCLUDE_DIR LingmoUtils/Logger.h)
 find_library(LINGMO_UTILS_LIBRARY NAMES LingmoUtils
-    PATHS /usr/lib /usr/lib/x86_64-linux-gnu /usr/local/lib)
-find_path(LINGMO_CONFIG_INCLUDE_DIR LingmoConfig/Config.h
-    PATHS /usr/include /usr/local/include)
+    PATHS /usr/lib/${DEB_HOST_MULTIARCH} /usr/lib /usr/local/lib)
+find_path(LINGMO_CONFIG_INCLUDE_DIR LingmoConfig/Config.h)
 find_library(LINGMO_CONFIG_LIBRARY NAMES LingmoConfig
-    PATHS /usr/lib /usr/lib/x86_64-linux-gnu /usr/local/lib)
+    PATHS /usr/lib/${DEB_HOST_MULTIARCH} /usr/lib /usr/local/lib)
 
 message(STATUS "LingmoIPC: include=${LINGMO_IPC_INCLUDE_DIR} lib=${LINGMO_IPC_LIBRARY}")
 message(STATUS "LingmoUtils: include=${LINGMO_UTILS_INCLUDE_DIR} lib=${LINGMO_UTILS_LIBRARY}")
