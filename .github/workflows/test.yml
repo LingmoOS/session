@@ -12,8 +12,35 @@ jobs:
       - name: Install git
         run: apt-get update -qq && apt-get install -y -qq git
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: apt-get update -qq && apt-get install -y -qq cmake ninja-build g++ qt6-base-dev
+      - name: Install system dependencies
+        run: apt-get update -qq && apt-get install -y -qq cmake ninja-build g++ qt6-base-dev curl jq
+      - name: Download lingmo-utils
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest \
+            | jq -r '.assets[] | select(.name | (startswith("liblingmoutils1") or startswith("liblingmoutils-dev")) and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoutils*.deb || apt-get install -y -f
+      - name: Download lingmo-config
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest \
+            | jq -r '.assets[] | select(.name | (startswith("liblingmoconfig1") or startswith("liblingmoconfig-dev")) and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoconfig*.deb || apt-get install -y -f
+      - name: Download lingmo-ipc
+        run: |
+          ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest \
+            | jq -r '.assets[] | select(.name | (startswith("liblingmoipc1") or startswith("liblingmoipc-dev")) and endswith(".deb")) | .browser_download_url')
+          for url in $ASSETS; do
+            curl -sL "$url" -o "/tmp/$(basename $url)"
+          done
+          dpkg -i /tmp/liblingmoipc*.deb || apt-get install -y -f
       - name: Configure
         run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
       - name: Build
