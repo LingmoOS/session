@@ -1,3 +1,5 @@
 usr/libexec/lingmo-session
-usr/share/systemd/user/lingmo-session.service
-usr/share/systemd/user/lingmo-session.target
+usr/lib/*/systemd/user/lingmo-session.service
+usr/lib/*/systemd/user/lingmo-session.target
+usr/lib/*/libLingmoSession.so.1
+usr/lib/*/libLingmoSession.so.1.0.0
