@@ -25,30 +25,45 @@ jobs:
 
       - name: Download lingmo-utils
         run: |
-          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest \
-            | jq -r '.assets[] | select(.name | test("^liblingmoutils(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          echo "=== Fetching lingmo-utils releases ==="
+          RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest)
+          echo "$RELEASE_JSON" | jq -r '.assets[].name'
+          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoutils(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
           for url in $ASSETS; do
+            echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
+          ls -la /tmp/liblingmoutils*.deb 2>/dev/null || echo "No deb files found"
           dpkg -i /tmp/liblingmoutils*.deb || apt-get install -y -f
+          find /usr -name "LingmoUtils*" -type f 2>/dev/null | head -20
 
       - name: Download lingmo-config
         run: |
-          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest \
-            | jq -r '.assets[] | select(.name | test("^liblingmoconfig(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          echo "=== Fetching lingmo-config releases ==="
+          RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest)
+          echo "$RELEASE_JSON" | jq -r '.assets[].name'
+          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoconfig(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
           for url in $ASSETS; do
+            echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
+          ls -la /tmp/liblingmoconfig*.deb 2>/dev/null || echo "No deb files found"
           dpkg -i /tmp/liblingmoconfig*.deb || apt-get install -y -f
+          find /usr -name "LingmoConfig*" -type f 2>/dev/null | head -20
 
       - name: Download lingmo-ipc
         run: |
-          ASSETS=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest \
-            | jq -r '.assets[] | select(.name | test("^liblingmoipc(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
+          echo "=== Fetching lingmo-ipc releases ==="
+          RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest)
+          echo "$RELEASE_JSON" | jq -r '.assets[].name'
+          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoipc(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
           for url in $ASSETS; do
+            echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
+          ls -la /tmp/liblingmoipc*.deb 2>/dev/null || echo "No deb files found"
           dpkg -i /tmp/liblingmoipc*.deb || apt-get install -y -f
+          find /usr -name "LingmoIPC*" -type f 2>/dev/null | head -20
 
       - name: Configure
         run: >
