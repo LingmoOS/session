@@ -67,6 +67,6 @@ install(EXPORT LingmoSessionTargets FILE LingmoSessionTargets.cmake
     NAMESPACE Lingmo:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LingmoSession)
 
 install(FILES ${CMAKE_SOURCE_DIR}/systemd/lingmo-session.service
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/user)
+    DESTINATION share/systemd/user)
 install(FILES ${CMAKE_SOURCE_DIR}/systemd/lingmo-session.target
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/user)
+    DESTINATION share/systemd/user)
