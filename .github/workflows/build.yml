@@ -25,56 +25,43 @@ jobs:
 
       - name: Download lingmo-utils
         run: |
-          echo "=== Fetching lingmo-utils releases ==="
           RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest)
-          echo "$RELEASE_JSON" | jq -r '.assets[].name'
-          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoutils(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
-          for url in $ASSETS; do
+          echo "Assets: $(echo "$RELEASE_JSON" | jq -r '.assets[].name')"
+          echo "$RELEASE_JSON" | jq -r '.assets[].browser_download_url' | grep '\.deb$' | while read url; do
             echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
-          ls -la /tmp/liblingmoutils*.deb 2>/dev/null || echo "No deb files found"
-          dpkg -i /tmp/liblingmoutils*.deb || apt-get install -y -f
-          find /usr -name "LingmoUtils*" -type f 2>/dev/null | head -20
+          ls -la /tmp/*.deb 2>/dev/null
+          dpkg -i /tmp/*.deb || apt-get install -y -f
 
       - name: Download lingmo-config
         run: |
-          echo "=== Fetching lingmo-config releases ==="
           RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest)
-          echo "$RELEASE_JSON" | jq -r '.assets[].name'
-          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoconfig(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
-          for url in $ASSETS; do
+          echo "Assets: $(echo "$RELEASE_JSON" | jq -r '.assets[].name')"
+          echo "$RELEASE_JSON" | jq -r '.assets[].browser_download_url' | grep '\.deb$' | while read url; do
             echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
-          ls -la /tmp/liblingmoconfig*.deb 2>/dev/null || echo "No deb files found"
-          dpkg -i /tmp/liblingmoconfig*.deb || apt-get install -y -f
-          find /usr -name "LingmoConfig*" -type f 2>/dev/null | head -20
+          dpkg -i /tmp/*.deb || apt-get install -y -f
 
       - name: Download lingmo-ipc
         run: |
-          echo "=== Fetching lingmo-ipc releases ==="
           RELEASE_JSON=$(curl -s https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest)
-          echo "$RELEASE_JSON" | jq -r '.assets[].name'
-          ASSETS=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | test("^liblingmoipc(1(?![0-9])|-dev)") and endswith(".deb")) | .browser_download_url')
-          for url in $ASSETS; do
+          echo "Assets: $(echo "$RELEASE_JSON" | jq -r '.assets[].name')"
+          echo "$RELEASE_JSON" | jq -r '.assets[].browser_download_url' | grep '\.deb$' | while read url; do
             echo "Downloading: $url"
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
-          ls -la /tmp/liblingmoipc*.deb 2>/dev/null || echo "No deb files found"
-          dpkg -i /tmp/liblingmoipc*.deb || apt-get install -y -f
-          find /usr -name "LingmoIPC*" -type f 2>/dev/null | head -20
+          dpkg -i /tmp/*.deb || apt-get install -y -f
 
-      - name: Verify installed Lingmo files
+      - name: Verify installation
         run: |
-          echo "=== All Lingmo files ==="
-          find /usr -name "*Lingmo*" -o -name "*lingmo*" 2>/dev/null | grep -v ".github" | head -50
-          echo "=== CMake config files ==="
-          find /usr -path "*/cmake/Lingmo*" -type f 2>/dev/null
-          echo "=== Shared libraries ==="
-          find /usr -name "libLingmo*" 2>/dev/null
-          echo "=== dpkg list ==="
-          dpkg -l | grep lingmo
+          echo "=== Installed packages ==="
+          dpkg -l | grep lingmo || echo "No lingmo packages found"
+          echo "=== Library files ==="
+          find /usr -name "libLingmo*" 2>/dev/null || echo "No libraries found"
+          echo "=== CMake configs ==="
+          find /usr -path "*/cmake/Lingmo*" -type f 2>/dev/null || echo "No cmake configs found"
 
       - name: Configure
         run: >
