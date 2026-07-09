@@ -42,7 +42,7 @@ set_target_properties(LingmoSession PROPERTIES
 )
 
 # Executable
-add_executable(lingmo-session main.cpp)
+add_executable(lingmo-session ${CMAKE_CURRENT_SOURCE_DIR}/LingmoSession/main.cpp)
 target_link_libraries(lingmo-session PRIVATE LingmoSession Qt6::Core Qt6::DBus)
 
 configure_file("${CMAKE_SOURCE_DIR}/include/LingmoSession/LingmoSessionExport.h.in"

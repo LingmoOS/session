@@ -54,6 +54,7 @@ jobs:
         run: >
           cmake -B build -G Ninja
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_PREFIX_PATH=/usr
           -DBUILD_TESTING=ON
 
       - name: Build
