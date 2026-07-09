@@ -1,0 +1,3 @@
+usr/include/LingmoSession/
+usr/lib/*/libLingmoSession.so
+usr/lib/*/cmake/LingmoSession/

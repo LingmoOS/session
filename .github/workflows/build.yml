@@ -1,0 +1,34 @@
+name: Build
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container: debian:trixie
+    steps:
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq git
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: apt-get update -qq && apt-get install -y -qq cmake ninja-build g++ qt6-base-dev
+      - name: Build dependencies
+        run: |
+          for dep in lingmo-utils lingmo-config lingmo-ipc; do
+            if [ ! -d "../$dep" ]; then
+              echo "Warning: $dep not found, skipping"
+            fi
+          done
+      - name: Configure
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Install
+        run: cmake --install build --prefix install_dir
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lingmo-session
+          path: install_dir/

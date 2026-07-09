@@ -1,0 +1,9 @@
+#pragma once
+#include <LingmoSession/LingmoSessionExport.h>
+#include <LingmoSession/LingmoSessionVersion.h>
+#include <LingmoSession/Types.h>
+#include <LingmoSession/Component.h>
+#include <LingmoSession/SessionManager.h>
+#include <LingmoSession/EnvironmentSetup.h>
+#include <LingmoSession/AutostartManager.h>
+#include <LingmoSession/CrashRecovery.h>

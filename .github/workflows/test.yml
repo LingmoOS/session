@@ -1,0 +1,22 @@
+name: Test
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    container: debian:trixie
+    steps:
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq git
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: apt-get update -qq && apt-get install -y -qq cmake ninja-build g++ qt6-base-dev
+      - name: Configure
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure

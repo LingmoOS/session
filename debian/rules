@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=OFF
+override_dh_auto_test:
+	echo "Tests are run separately in CI"
+override_dh_missing:
+	dh_missing --fail-missing

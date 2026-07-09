@@ -1,0 +1,16 @@
+[Unit]
+Description=Lingmo Desktop Session
+After=graphical-session.target
+PartOf=graphical-session.target
+CollectMode=inactive-or-failed
+RefuseManualStop=yes
+
+[Service]
+Type=notify
+ExecStart=/usr/libexec/lingmo-session
+ExecStop=/usr/bin/kill -TERM $MAINPID
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

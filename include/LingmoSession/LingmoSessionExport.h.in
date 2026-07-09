@@ -1,0 +1,7 @@
+#pragma once
+#include <QtCore/qglobal.h>
+#if defined(LINGMOSESSION_LIBRARY)
+#  define LINGMOSESSION_EXPORT Q_DECL_EXPORT
+#else
+#  define LINGMOSESSION_EXPORT Q_DECL_IMPORT
+#endif

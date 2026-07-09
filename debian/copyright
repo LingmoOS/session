@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Lingmo Session
+Upstream-Contact: Lingmo OS Team <team@lingmo.org>
+Source: https://github.com/Matrinsoft/lingmo-session
+Files: *
+Copyright: 2026 Lingmo OS Team
+License: GPL-2.0+

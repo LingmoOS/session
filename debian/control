@@ -1,0 +1,22 @@
+Source: lingmo-session
+Section: x11
+Priority: optional
+Maintainer: Lingmo OS Team <team@lingmo.org>
+Build-Depends: debhelper-compat (= 13), cmake (>= 3.21), qt6-base-dev (>= 6.5),
+               lingmo-ipc-dev, lingmo-utils-dev, lingmo-config-dev
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: lingmo-session
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, systemd
+Description: Lingmo Desktop - Session manager
+ Session manager that orchestrates the startup of all Lingmo Desktop
+ components in dependency order, monitors their health, and handles
+ crash recovery.
+
+Package: lingmo-session-dev
+Architecture: any
+Section: libdevel
+Depends: lingmo-session (= ${binary:Version}), ${misc:Depends}
+Description: Lingmo Desktop - Session manager (development files)
