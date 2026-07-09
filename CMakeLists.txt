@@ -20,9 +20,18 @@ option(BUILD_TESTING "Build tests" ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core DBus)
 find_package(Qt6 COMPONENTS Test QUIET)
-find_package(LingmoIPC REQUIRED)
-find_package(LingmoUtils REQUIRED)
-find_package(LingmoConfig REQUIRED)
+
+# Find Lingmo dependencies
+find_path(LINGMO_IPC_INCLUDE_DIR LingmoIPC/DBusConnection.h)
+find_library(LINGMO_IPC_LIBRARY NAMES LingmoIPC)
+find_path(LINGMO_UTILS_INCLUDE_DIR LingmoUtils/Logger.h)
+find_library(LINGMO_UTILS_LIBRARY NAMES LingmoUtils)
+find_path(LINGMO_CONFIG_INCLUDE_DIR LingmoConfig/Config.h)
+find_library(LINGMO_CONFIG_LIBRARY NAMES LingmoConfig)
+
+if(NOT LINGMO_IPC_LIBRARY OR NOT LINGMO_UTILS_LIBRARY OR NOT LINGMO_CONFIG_LIBRARY)
+    message(FATAL_ERROR "LingmoIPC, LingmoUtils, and LingmoConfig must be installed")
+endif()
 
 add_subdirectory(src)
 

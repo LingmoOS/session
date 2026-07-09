@@ -30,10 +30,13 @@ target_include_directories(LingmoSession
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${LINGMO_IPC_INCLUDE_DIR}
+        ${LINGMO_UTILS_INCLUDE_DIR}
+        ${LINGMO_CONFIG_INCLUDE_DIR}
 )
 target_link_libraries(LingmoSession
     PUBLIC Qt6::Core Qt6::DBus
-    PRIVATE Lingmo::IPC Lingmo::Utils Lingmo::Config
+    PRIVATE ${LINGMO_IPC_LIBRARY} ${LINGMO_UTILS_LIBRARY} ${LINGMO_CONFIG_LIBRARY}
 )
 target_compile_definitions(LingmoSession PRIVATE LINGMOSESSION_LIBRARY)
 set_target_properties(LingmoSession PROPERTIES
