@@ -63,7 +63,7 @@ jobs:
         run: |
           ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/Matrinsoft/lingmo-utils/releases/latest \
-            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("debug") | not) and (contains("devel") or contains("libs"))) | .browser_download_url')
           for url in $ASSETS; do
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
@@ -72,7 +72,7 @@ jobs:
         run: |
           ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/Matrinsoft/lingmo-config/releases/latest \
-            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("debug") | not) and (contains("devel") or contains("libs"))) | .browser_download_url')
           for url in $ASSETS; do
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
@@ -81,7 +81,7 @@ jobs:
         run: |
           ASSETS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/Matrinsoft/lingmo-ipc/releases/latest \
-            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("devel") or contains("libs"))) | .browser_download_url')
+            | jq -r '.assets[] | select(.name | endswith(".rpm") and (contains("debug") | not) and (contains("devel") or contains("libs"))) | .browser_download_url')
           for url in $ASSETS; do
             curl -sL "$url" -o "/tmp/$(basename $url)"
           done
